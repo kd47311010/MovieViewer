@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black_alpha_87">#87000000</color>
+    <color name="black_alpha_54">#54000000</color>
+    <color name="black_alpha_26">#26000000</color>
+    <color name="black_alpha_12">#12000000</color>
+
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#FF5252</color>
+
+</resources>
