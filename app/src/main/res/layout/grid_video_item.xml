@@ -1,0 +1,25 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_alpha_12"
+    android:layout_margin="@dimen/grid_padding_4dp"
+    style="@style/Widget.MyTheme.GridItem">
+
+    <ImageView
+        android:id="@+id/grid_video_thumbnail"
+        style="@style/Widget.MyTheme.GridItem.Thumbnail"/>
+
+    <TextView
+        android:id="@+id/grid_video_title"
+        android:transitionName="SharedElement"
+        style="@style/Widget.MyTheme.GridItem.Label"/>
+
+    <View
+        android:id="@+id/grid_video_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:transitionName="SharedElementShadow"/>
+
+</LinearLayout>
+
