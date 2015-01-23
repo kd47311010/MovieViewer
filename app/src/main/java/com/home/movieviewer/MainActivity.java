@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
+        final SwipeRefreshLayout swipeView = (SwipeRefre0shLayout) findViewById(R.id.swipe);
         final TextView rndNum = (TextView) findViewById(R.id.rndNum);
         swipeView.setColorSchemeColors(
                 android.R.color.holo_blue_light,
