@@ -16,68 +16,6 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new MovieFragment())
                     .commit();
         }
-<<<<<<< HEAD
-        final SwipeRefreshLayout swipeView = (SwipeRefre0shLayout) findViewById(R.id.swipe);
-        final TextView rndNum = (TextView) findViewById(R.id.rndNum);
-        swipeView.setColorSchemeColors(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_green_light);
-
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeLayout);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-
-            //swipeView.setEnabled(false);
-            //ListView lView = (ListView) findViewById(R.id.list);
-            //ArrayAdapter<String> adp = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, createItems(40,0 ));
-            //lView.setAdapter(adp);
-
-            //swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                swipeView.setRefreshing(true);
-                Log.d("Swipe", "Refreshing Number");
-                (new Handler()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeView.setRefreshing(false);
-                        double f = Math.random();
-                        rndNum.setText(String.valueOf(f));
-                    }
-                }, 3000);
-            }
-        });
-
-        lView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem == 0)
-                    swipeView.setEnabled(true);
-                else
-                    swipeView.setEnabled(false);
-            }
-        });
-    }
-
-
-    private String getData(String url) throws IOException {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        Response response = okHttpClient.newCall(request).execute();
-        return response.body().toString();
-=======
->>>>>>> origin/master
     }
 
     @Override
@@ -98,7 +36,6 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
