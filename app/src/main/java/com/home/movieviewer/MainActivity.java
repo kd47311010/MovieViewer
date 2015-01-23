@@ -1,37 +1,22 @@
 package com.home.movieviewer;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-import java.util.List;
-
 
 public class MainActivity extends ActionBarActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            String dailyData = getData(DailyBoxOffice.getUrl());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new MovieFragment())
+                    .commit();
         }
+<<<<<<< HEAD
         final SwipeRefreshLayout swipeView = (SwipeRefre0shLayout) findViewById(R.id.swipe);
         final TextView rndNum = (TextView) findViewById(R.id.rndNum);
         swipeView.setColorSchemeColors(
@@ -91,8 +76,9 @@ public class MainActivity extends ActionBarActivity {
                 .build();
         Response response = okHttpClient.newCall(request).execute();
         return response.body().toString();
+=======
+>>>>>>> origin/master
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,4 +101,5 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
