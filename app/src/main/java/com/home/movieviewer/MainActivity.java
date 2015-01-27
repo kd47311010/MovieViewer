@@ -2,10 +2,17 @@ package com.home.movieviewer;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
+    private Toolbar toolbar;
+
+    protected void initToolbar(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new MovieFragment())
                     .commit();
         }
+        initToolbar();
     }
 
     @Override

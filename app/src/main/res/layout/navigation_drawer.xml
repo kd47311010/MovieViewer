@@ -85,7 +85,7 @@
         <!--android:layout_height=""/>-->
 
         <FrameLayout
-            android:id="@+id/left_drawer_my_videos"
+            android:id="@+id/left_drawer_home"
             style="@style/Widget.MyTheme.NavigationDrawerItem">
 
             <ImageView
@@ -105,7 +105,7 @@
 
 
         <FrameLayout
-            android:id="@+id/left_drawer_my_videos"
+            android:id="@+id/left_drawer_my_movies"
             style="@style/Widget.MyTheme.NavigationDrawerItem">
 
             <ImageView
@@ -117,13 +117,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="즐겨찾는 영화"
+                android:text="내 영화"
                 android:layout_marginLeft="@dimen/keyline_second"
                 style="@style/Widget.MyTheme.NavigationDrawerItem.TextView"/>
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/left_drawer_purchase_videos"
+            android:id="@+id/left_drawer_purchase_Movies"
             style="@style/Widget.MyTheme.NavigationDrawerItem">
             <ImageView
                 android:src="@drawable/ic_action_action_shopping_cart"
@@ -140,7 +140,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/left_drawer_my_videos"
+            android:id="@+id/left_drawer_check_tickets"
             style="@style/Widget.MyTheme.NavigationDrawerItem">
 
             <ImageView
@@ -158,7 +158,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/left_drawer_my_videos"
+            android:id="@+id/left_drawer_my_page"
             style="@style/Widget.MyTheme.NavigationDrawerItem">
 
             <ImageView
