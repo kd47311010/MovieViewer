@@ -1,22 +1,15 @@
 package com.home.movieviewer;
 
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -27,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by namhyun on 2015-01-23.
@@ -57,157 +52,39 @@ public class MovieFragment extends Fragment {
         //new RequestDataTask().execute(MovieApi.getUri(MovieApi.TYPE_COMMON_CODE));
         return rootView;
     }
-//
-//    public class VideoBrowseActivity extends ActionBarActivity
-//            //implements VideoBrowseFragment.Callbacks {
-//
-//        private static final String TAG = "VideoBrowseActivity";
-//
-//        private View  mToolbar;
-//        private View mTabContainer;
-//
-//        private int mMaxTabContainerY;
-//        private int mMinTabContainerY;
-//        private int mMaxAppBarY;
-//        private int mMinAppBarY;
-//        private int mActionbarHeight;
-//
-//        private DrawerLayout mDrawerLayout;
-//        private ActionBarDrawerToggle mDrawerToggle;
-//        private RecyclerView.OnScrollListener mScrollListener;
-//
-//        @Override
-//        protected void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            setContentView(R.layout.activity_video_browse);
-//
-//            TypedValue tv = new TypedValue();
-//            if (getTheme().resolveAttribute(R.attr.actionBarSize, tv, true)) {
-//                mActionbarHeight
-//                        = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-//            }
-//
-//            initToolbar();
-//            //initFragmentPager();
-//            initNaviDrawer();
-//            initParallaxEffect();
-//        }
-//
-//    private void initToolbar() {
-//
-//        Log.d(TAG, "initToolbar");
-//        //mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-//        //setSupportActionBar(mToolbar);
-//    }
-//
-//
-//
-//
-//
 
-//
-//
-//
-//        allVideos.setOnClickListener(clickListener);
-//        myVideos.setOnClickListener(clickListener);
-//        shopping.setOnClickListener(clickListener);
-//        settings.setOnClickListener(clickListener);
-//        help.setOnClickListener(clickListener);
-//    }
-//
-//    private void initParallaxEffect() {
-//
-//        mMaxTabContainerY = mActionbarHeight;
-//        mMinTabContainerY = 0;
-//
-//        mMinAppBarY = -mActionbarHeight;
-//        mMaxAppBarY = 0;
-//
-//        mScrollListener = new RecyclerView.OnScrollListener() {
-//
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                // IGNORED
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                // TODO
-//            }
-//        };
-//    }
-//
-//
-//    private void showHome() {
-//        mDrawerLayout.closeDrawers();
-//    }
-//    private void showMyMovies() {
-//        mDrawerLayout.closeDrawers();
-//    }
-//
-//    private void showPurchase_Movies() {
-//        mDrawerLayout.closeDrawers();
-//    }
-//
-//    private void showCheck_Tickets() {
-//        mDrawerLayout.closeDrawers();
-//    }
-//
-//    private void showMy_Page() {
-//        mDrawerLayout.closeDrawers();
-//    }
-//
-//    private void showSettings() {
-//        mDrawerLayout.closeDrawers();
-//    }
-//
-//    private void showHelp() {
-//        mDrawerLayout.closeDrawers();
-//    }
+    private class RequestDataTask extends AsyncTask<Uri, Void, List<ResultContainer>> {
 
-
-    private class RequestDataTask extends AsyncTask<Uri, Void, String> {
-
-        private void getValueFromSource(String jsonStr){
+        private List<ResultContainer> getValueFromSource(String jsonStr) {
             final String OBJECT_BOX_OFFICE_RESULT = "boxOfficeResult";
             final String ARRAY_DAILY_BOX_OFFICE_LIST = "dailyBoxOfficeList";
 
+            List<ResultContainer> containers = new ArrayList<>();
             try {
                 JSONObject jsonObject = new JSONObject(jsonStr);
                 JSONObject boxOfficeResult = jsonObject.getJSONObject(OBJECT_BOX_OFFICE_RESULT);
                 JSONArray dailyBoxOfficeList = boxOfficeResult.getJSONArray(ARRAY_DAILY_BOX_OFFICE_LIST);
 
-                for(int i = 0; i < dailyBoxOfficeList.length(); i++){
+                for (int i = 0; i < dailyBoxOfficeList.length(); i++) {
                     JSONObject object = dailyBoxOfficeList.getJSONObject(i);
                     String rnum = object.getString("rnum");
                     String rank = object.getString("rank");
                     String rankInten = object.getString("rankInten");
                     String rankOldAndNew = object.getString("rankOldAndNew");
-                    String movieCd = object.getString("movieCd");
                     String movieNm = object.getString("movieNm");
                     String openDt = object.getString("openDt");
-                    String salesAmt = object.getString("salesAmt");
-                    String salesShare = object.getString("salesShare");
-                    String salesInten = object.getString("salesInten");
-                    String salesChange = object.getString("salesChange");
-                    String salesAcc = object.getString("salesAcc");
                     String audiCnt = object.getString("audiCnt");
-                    String audiInten = object.getString("audiInten");
-                    String audiChange = object.getString("audiChange");
-                    String audiAcc = object.getString("audiAcc");
-                    String scrnCnt = object.getString("scrnCnt");
-                    String showCnt = object.getString("showCnt");
 
+                    containers.add(new ResultContainer(rnum, rank, rankInten, rankOldAndNew, movieNm, openDt, audiCnt));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            return containers;
         }
 
         @Override
-        protected String doInBackground(Uri... params) {
+        protected List<ResultContainer> doInBackground(Uri... params) {
             OkHttpClient okHttpClient = new OkHttpClient();
             Response response = null;
             try {
@@ -218,21 +95,64 @@ public class MovieFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            String result = response.body().toString();
-
-            return result;
+            return getValueFromSource(response.body().toString());
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(List<ResultContainer> resultContainers) {
+            super.onPostExecute(resultContainers);
             // Do something
-            try {
-                JSONObject jsonObject = new JSONObject(s);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            for(ResultContainer resultContainer : resultContainers){
+//+addItem
             }
+        }
+    }
 
+    private class ResultContainer{
+        private String rnum;
+        private String rank;
+        private String rankInten;
+        private String rankOldAndNew;
+        private String movieNm;
+        private String openDt;
+        private String audiCnt;
+
+        private ResultContainer(String rnum, String rank, String rankInten, String rankOldAndNew, String movieNm, String openDt, String audiCnt) {
+            this.rnum = rnum;
+            this.rank = rank;
+            this.rankInten = rankInten;
+            this.rankOldAndNew = rankOldAndNew;
+            this.movieNm = movieNm;
+            this.openDt = openDt;
+            this.audiCnt = audiCnt;
+        }
+
+        public String getRnum() {
+            return rnum;
+        }
+
+        public String getRank() {
+            return rank;
+        }
+
+        public String getRankInten() {
+            return rankInten;
+        }
+
+        public String getRankOldAndNew() {
+            return rankOldAndNew;
+        }
+
+        public String getMovieNm() {
+            return movieNm;
+        }
+
+        public String getOpenDt() {
+            return openDt;
+        }
+
+        public String getAudiCnt() {
+            return audiCnt;
         }
     }
 }
