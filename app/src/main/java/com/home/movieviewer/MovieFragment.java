@@ -170,6 +170,42 @@ public class MovieFragment extends Fragment {
 
     private class RequestDataTask extends AsyncTask<Uri, Void, String> {
 
+        private void getValueFromSource(String jsonStr){
+            final String OBJECT_BOX_OFFICE_RESULT = "boxOfficeResult";
+            final String ARRAY_DAILY_BOX_OFFICE_LIST = "dailyBoxOfficeList";
+
+            try {
+                JSONObject jsonObject = new JSONObject(jsonStr);
+                JSONObject boxOfficeResult = jsonObject.getJSONObject(OBJECT_BOX_OFFICE_RESULT);
+                JSONArray dailyBoxOfficeList = boxOfficeResult.getJSONArray(ARRAY_DAILY_BOX_OFFICE_LIST);
+
+                for(int i = 0; i < dailyBoxOfficeList.length(); i++){
+                    JSONObject object = dailyBoxOfficeList.getJSONObject(i);
+                    String rnum = object.getString("rnum");
+                    String rank = object.getString("rank");
+                    String rankInten = object.getString("rankInten");
+                    String rankOldAndNew = object.getString("rankOldAndNew");
+                    String movieCd = object.getString("movieCd");
+                    String movieNm = object.getString("movieNm");
+                    String openDt = object.getString("openDt");
+                    String salesAmt = object.getString("salesAmt");
+                    String salesShare = object.getString("salesShare");
+                    String salesInten = object.getString("salesInten");
+                    String salesChange = object.getString("salesChange");
+                    String salesAcc = object.getString("salesAcc");
+                    String audiCnt = object.getString("audiCnt");
+                    String audiInten = object.getString("audiInten");
+                    String audiChange = object.getString("audiChange");
+                    String audiAcc = object.getString("audiAcc");
+                    String scrnCnt = object.getString("scrnCnt");
+                    String showCnt = object.getString("showCnt");
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         @Override
         protected String doInBackground(Uri... params) {
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -182,7 +218,9 @@ public class MovieFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return response.body().toString();
+            String result = response.body().toString();
+
+            return result;
         }
 
         @Override
