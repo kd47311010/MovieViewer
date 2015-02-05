@@ -23,13 +23,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.Result;
+
 /**
  * Created by namhyun on 2015-01-23.
  */
 public class MovieFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mAdapter;
+    private MovieAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,19 +40,20 @@ public class MovieFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.content_view);
         mRecyclerView.setLayoutManager(mLayoutManager);
-//        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
-        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_layout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_layout);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Do something
                 // e.g. Request data
+                new RequestDataTask().execute(MovieApi.getUri(MovieApi.TYPE_COMMON_CODE));
             }
         });
         // Data request example
-        //new RequestDataTask().execute(MovieApi.getUri(MovieApi.TYPE_COMMON_CODE));
+        new RequestDataTask().execute(MovieApi.getUri(MovieApi.TYPE_COMMON_CODE));
         return rootView;
     }
 
@@ -84,6 +88,14 @@ public class MovieFragment extends Fragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (!mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        }
+
+        @Override
         protected List<ResultContainer> doInBackground(Uri... params) {
             OkHttpClient okHttpClient = new OkHttpClient();
             Response response = null;
@@ -102,57 +114,12 @@ public class MovieFragment extends Fragment {
         protected void onPostExecute(List<ResultContainer> resultContainers) {
             super.onPostExecute(resultContainers);
             // Do something
-            for(ResultContainer resultContainer : resultContainers){
-//+addItem
+            if (resultContainers != null) {
+                for (ResultContainer container : resultContainers) {
+                    mAdapter.addItem(container);
+                }
             }
-        }
-    }
-
-    private class ResultContainer{
-        private String rnum;
-        private String rank;
-        private String rankInten;
-        private String rankOldAndNew;
-        private String movieNm;
-        private String openDt;
-        private String audiCnt;
-
-        private ResultContainer(String rnum, String rank, String rankInten, String rankOldAndNew, String movieNm, String openDt, String audiCnt) {
-            this.rnum = rnum;
-            this.rank = rank;
-            this.rankInten = rankInten;
-            this.rankOldAndNew = rankOldAndNew;
-            this.movieNm = movieNm;
-            this.openDt = openDt;
-            this.audiCnt = audiCnt;
-        }
-
-        public String getRnum() {
-            return rnum;
-        }
-
-        public String getRank() {
-            return rank;
-        }
-
-        public String getRankInten() {
-            return rankInten;
-        }
-
-        public String getRankOldAndNew() {
-            return rankOldAndNew;
-        }
-
-        public String getMovieNm() {
-            return movieNm;
-        }
-
-        public String getOpenDt() {
-            return openDt;
-        }
-
-        public String getAudiCnt() {
-            return audiCnt;
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_height"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/keyline_first_minus"
+        android:paddingLeft="@dimen/keyline_first"
+        android:paddingRight="@dimen/keyline_first"
+        android:paddingTop="@dimen/keyline_first_minus">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/content_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/content_primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/black_alpha_87"
+                android:textSize="@dimen/text_primary_size" />
+
+            <TextView
+                android:id="@+id/content_secondary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/text_line_spacing"
+                android:ellipsize="end"
+                android:lineSpacingExtra="@dimen/text_line_spacing"
+                android:maxLines="2"
+                android:textColor="@color/black_alpha_54"
+                android:textSize="@dimen/text_secondary_size" />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/content_image"
+            android:layout_width="@dimen/list_image_size_width"
+            android:layout_height="@dimen/list_image_size_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/keyline_first"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_alpha_12" />
+
+</RelativeLayout>

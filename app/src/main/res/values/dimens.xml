@@ -31,17 +31,14 @@
     <!--navigation drawer-->
     <dimen name="navdrawer_profile_image_size">40dp</dimen>
 
-    <!--grid-->
-    <dimen name="grid_height">@dimen/appbar_x3</dimen>
-    <dimen name="grid_padding_1dp">1dp</dimen>
-    <dimen name="grid_padding_4dp">4dp</dimen>
-    <dimen name="grid_text_padding_16dp">16dp</dimen>
-    <dimen name="grid_single_line_footer_height">48dp</dimen>
-    <dimen name="grid_two_line_footer_height">68dp</dimen>
-    <dimen name="grid_text_size_14sp">@dimen/content_body_14sp</dimen>
-    <dimen name="grid_text_size_16sp">@dimen/content_subtitle_16sp</dimen>
 
     <!--list-->
+    <dimen name="list_height">88dp</dimen>
+    <dimen name="list_image_size_height">56dp</dimen>
+    <dimen name="list_image_size_width">64dp</dimen>
+    <dimen name="text_primary_size">16sp</dimen>
+    <dimen name="text_secondary_size">14sp</dimen>
+    <dimen name="text_line_spacing">4dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_size">56dp</dimen>

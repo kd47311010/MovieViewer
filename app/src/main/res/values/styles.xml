@@ -63,31 +63,5 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="Widget.MyTheme.GridItem.Thumbnail">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/grid_height</item>
-
-        <item name="android:background">@null</item>
-        <item name="android:clickable">false</item>
-        <item name="android:focusable">false</item>
-        <item name="android:focusableInTouchMode">false</item>
-    </style>
-
-    <style name="Widget.MyTheme.GridItem.Label">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/grid_two_line_footer_height</item>
-
-        <item name="android:textColor">@color/black_alpha_87</item>
-        <item name="android:padding">@dimen/grid_text_padding_16dp</item>
-
-        <item name="android:textSize">@dimen/grid_text_size_14sp</item>
-        <item name="android:maxLines">2</item>
-        <item name="android:ellipsize">end</item>
-
-        <item name="android:background">@null</item>
-        <item name="android:clickable">false</item>
-        <item name="android:focusable">false</item>
-        <item name="android:focusableInTouchMode">false</item>
-    </style>
 
 </resources>
