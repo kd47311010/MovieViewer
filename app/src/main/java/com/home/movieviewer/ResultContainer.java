@@ -11,8 +11,9 @@ public class ResultContainer {
     private String movieNm;
     private String openDt;
     private String audiCnt;
+    private String movieImg;
 
-    public ResultContainer(String rnum, String rank, String rankInten, String rankOldAndNew, String movieNm, String openDt, String audiCnt) {
+    public ResultContainer(String rnum, String rank, String rankInten, String rankOldAndNew, String movieNm, String openDt, String audiCnt, String movieImg) {
         this.rnum = rnum;
         this.rank = rank;
         this.rankInten = rankInten;
@@ -20,6 +21,7 @@ public class ResultContainer {
         this.movieNm = movieNm;
         this.openDt = openDt;
         this.audiCnt = audiCnt;
+        this.movieImg = movieImg;
     }
 
     public String getRnum() {
@@ -49,6 +51,8 @@ public class ResultContainer {
     public String getAudiCnt() {
         return audiCnt;
     }
+
+    public String getMovieImg() { return movieImg; }
 
 
 }

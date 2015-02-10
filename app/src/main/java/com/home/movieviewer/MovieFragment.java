@@ -78,14 +78,17 @@ public class MovieFragment extends Fragment {
                     String movieNm = object.getString("movieNm");
                     String openDt = object.getString("openDt");
                     String audiCnt = object.getString("audiCnt");
+                    String movieImg = object.getString("movieImg");
 
-                    containers.add(new ResultContainer(rnum, rank, rankInten, rankOldAndNew, movieNm, openDt, audiCnt));
+                    containers.add(new ResultContainer(rnum, rank, rankInten, rankOldAndNew, movieNm, openDt, audiCnt, movieImg));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             return containers;
         }
+
+
 
         @Override
         protected void onPreExecute() {
