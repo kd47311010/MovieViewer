@@ -3,6 +3,10 @@
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E0E0E0"
+    android:paddingLeft="@dimen/keyline_first_minus"
+    android:paddingRight="@dimen/keyline_first_minus"
+    android:paddingTop="@dimen/keyline_first_minus"
     tools:context=".MovieFragment">
 
     <android.support.v7.widget.RecyclerView

@@ -1,8 +1,6 @@
 package com.home.movieviewer;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.transform.Result;
 
 /**
  * Created by P400 on 2015-01-29.
@@ -43,6 +36,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
     }
 
+    public void clearItem() {
+        mResultContainerList.clear();
+        notifyDataSetChanged();
+    }
+
     public void addItem(ResultContainer container) {
         mResultContainerList.add(container);
         notifyDataSetChanged();
@@ -55,16 +53,27 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public MovieAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.display_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        View itemView = holder.getView();
         ResultContainer container = mResultContainerList.get(position);
+        View itemView = holder.getView();
+        TextView primaryTextView = (TextView) itemView.findViewById(R.id.content_primary);
+        TextView secondaryTextView = (TextView) itemView.findViewById(R.id.content_secondary);
+        ImageView thumbnailView = (ImageView) itemView.findViewById(R.id.content_image);
 
+        String primaryText = new StringBuilder(container.getMovieNm())
+                .append(" (").append(container.getOpenDt().substring(0, 4)).append(")").toString();
 
+        String secondaryText = new StringBuilder(container.getAudiCnt())
+                .append(" (").append(container.getAudiInten()).append(")").toString();
+
+        primaryTextView.setText(primaryText);
+        secondaryTextView.setText(secondaryText);
+        thumbnailView.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.no_thumbnail));
     }
 
 
