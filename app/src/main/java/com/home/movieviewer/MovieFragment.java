@@ -1,16 +1,19 @@
 package com.home.movieviewer;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.home.movieviewer.api.ApiImpl;
+import com.home.movieviewer.api.KobisApi;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -20,10 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-
-import javax.xml.transform.Result;
 
 /**
  * Created by namhyun on 2015-01-23.
@@ -39,7 +42,10 @@ public class MovieFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.content_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new MovieAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_layout);
@@ -49,17 +55,32 @@ public class MovieFragment extends Fragment {
             public void onRefresh() {
                 // Do something
                 // e.g. Request data
-                new RequestDataTask().execute(MovieApi.getUri(MovieApi.TYPE_COMMON_CODE));
+                updateData();
             }
         });
         // Data request example
-        new RequestDataTask().execute(MovieApi.getUri(MovieApi.TYPE_COMMON_CODE));
+        updateData();
         return rootView;
     }
 
-    private class RequestDataTask extends AsyncTask<Uri, Void, List<ResultContainer>> {
+    private void updateData(){
+        Log.d("MovieFragment", getToday());
+        KobisApi kobisApi = new KobisApi(KobisApi.TYPE_DAILY_BOX_OFFICE);
+        kobisApi.setParams(getToday());
+        new RequestDataTask().execute(kobisApi);
+    }
 
-        private List<ResultContainer> getValueFromSource(String jsonStr) {
+    private String getToday(){
+        final String dateFormat = "yyyyMMdd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
+    private class RequestDataTask extends AsyncTask<ApiImpl, Void, List<ResultContainer>> {
+
+        private List<ResultContainer> getCommonCodeFromJson(String jsonStr) {
             final String OBJECT_BOX_OFFICE_RESULT = "boxOfficeResult";
             final String ARRAY_DAILY_BOX_OFFICE_LIST = "dailyBoxOfficeList";
 
@@ -71,23 +92,30 @@ public class MovieFragment extends Fragment {
 
                 for (int i = 0; i < dailyBoxOfficeList.length(); i++) {
                     JSONObject object = dailyBoxOfficeList.getJSONObject(i);
-                    String rnum = object.getString("rnum");
                     String rank = object.getString("rank");
                     String rankInten = object.getString("rankInten");
                     String rankOldAndNew = object.getString("rankOldAndNew");
                     String movieNm = object.getString("movieNm");
                     String openDt = object.getString("openDt");
                     String audiCnt = object.getString("audiCnt");
-                    String movieImg = object.getString("movieImg");
+                    String audiInten = object.getString("audiInten");
 
-                    containers.add(new ResultContainer(rnum, rank, rankInten, rankOldAndNew, movieNm, openDt, audiCnt, movieImg));
+                    ResultContainer resultContainer = new ResultContainer();
+                    resultContainer.setRank(rank);
+                    resultContainer.setRankInten(rankInten);
+                    resultContainer.setRankOldAndNew(rankOldAndNew);
+                    resultContainer.setMovieNm(movieNm);
+                    resultContainer.setOpenDt(openDt);
+                    resultContainer.setAudiCnt(audiCnt);
+                    resultContainer.setAudiInten(audiInten);
+
+                    containers.add(resultContainer);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             return containers;
         }
-
 
 
         @Override
@@ -99,24 +127,31 @@ public class MovieFragment extends Fragment {
         }
 
         @Override
-        protected List<ResultContainer> doInBackground(Uri... params) {
+        protected List<ResultContainer> doInBackground(ApiImpl... params) {
             OkHttpClient okHttpClient = new OkHttpClient();
             Response response = null;
+            String result = null;
             try {
                 Request request = new Request.Builder()
-                        .url(params[0].toString())
+                        .url(params[0].getUri().toString())
                         .build();
                 response = okHttpClient.newCall(request).execute();
+                result = response.body().string();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return getValueFromSource(response.body().toString());
+            if (params[0].getType() == KobisApi.TYPE_DAILY_BOX_OFFICE) {
+                return getCommonCodeFromJson(result);
+            } else {
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(List<ResultContainer> resultContainers) {
             super.onPostExecute(resultContainers);
             // Do something
+            mAdapter.clearItem();
             if (resultContainers != null) {
                 for (ResultContainer container : resultContainers) {
                     mAdapter.addItem(container);
