@@ -11,6 +11,7 @@ public class ResultContainer {
     private String openDt;
     private String audiCnt;
     private String audiInten;
+    private String audiAcc;
 
     public ResultContainer() {
     }
@@ -55,19 +56,15 @@ public class ResultContainer {
         this.openDt = openDt;
     }
 
-    public String getAudiCnt() {
-        return audiCnt;
-    }
+    public String getAudiCnt() { return audiCnt; }
 
-    public void setAudiCnt(String audiCnt) {
-        this.audiCnt = audiCnt;
-    }
+    public void setAudiCnt(String audiCnt) { this.audiCnt = audiCnt; }
 
-    public String getAudiInten() {
-        return audiInten;
-    }
+    public String getAudiInten() { return audiInten; }
 
-    public void setAudiInten(String audiInten) {
-        this.audiInten = audiInten;
-    }
+    public void setAudiInten(String audiInten) { this.audiInten = audiInten; }
+
+    public String getAudiAcc() { return audiAcc; }
+
+    public void setAudiAcc(String audiAcc) { this.audiAcc = audiAcc; }
 }

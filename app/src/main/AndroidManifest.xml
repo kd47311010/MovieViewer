@@ -7,11 +7,11 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="일일박스오피스"
+        android:label="무브무브"
         android:theme="@style/MyTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="무브무브" >
+            android:label="일일박스오피스" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

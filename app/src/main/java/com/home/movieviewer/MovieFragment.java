@@ -92,13 +92,14 @@ public class MovieFragment extends Fragment {
 
                 for (int i = 0; i < dailyBoxOfficeList.length(); i++) {
                     JSONObject object = dailyBoxOfficeList.getJSONObject(i);
-                    String rank = object.getString("rank");
-                    String rankInten = object.getString("rankInten");
-                    String rankOldAndNew = object.getString("rankOldAndNew");
-                    String movieNm = object.getString("movieNm");
-                    String openDt = object.getString("openDt");
-                    String audiCnt = object.getString("audiCnt");
-                    String audiInten = object.getString("audiInten");
+                    String rank = object.getString("rank"); //순위
+                    String rankInten = object.getString("rankInten"); //전일대비 증감분
+                    String rankOldAndNew = object.getString("rankOldAndNew"); //랭크 신규 진입 여부
+                    String movieNm = object.getString("movieNm"); //영화명
+                    String openDt = object.getString("openDt"); //개봉일
+                    String audiCnt = object.getString("audiCnt"); //해당일 관객 수
+                    String audiInten = object.getString("audiInten"); //관객 수 증감 분
+                    String audiAcc = object.getString("audiAcc"); //누적 관객 수
 
                     ResultContainer resultContainer = new ResultContainer();
                     resultContainer.setRank(rank);
@@ -108,6 +109,7 @@ public class MovieFragment extends Fragment {
                     resultContainer.setOpenDt(openDt);
                     resultContainer.setAudiCnt(audiCnt);
                     resultContainer.setAudiInten(audiInten);
+                    resultContainer.setAudiAcc(audiAcc);
 
                     containers.add(resultContainer);
                 }
