@@ -67,11 +67,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         TextView threeTextView = (TextView) itemView.findViewById(R.id.content_three);
         ImageView thumbnailView = (ImageView) itemView.findViewById(R.id.content_image);
 
-        String primaryText = new StringBuilder(container.getMovieNm())
+        String primaryText = new StringBuilder().append(container.getRank()).append(" ").append(container.getMovieNm())
                 .append(" (").append(container.getOpenDt().substring(0, 4)).append(")").toString();
 
-        String secondaryText = new StringBuilder().append("금일 ").append(container.getAudiCnt()).append(" 명")
-                .append(" ( 전일대비 ").append(container.getAudiInten()).append("명 )").toString();
+        String secondaryText = new StringBuilder()
+                .append(" ( ").append(container.getRankInten()).append(" 위 ) ").toString();
 
         String threeText = new StringBuilder()
                 .append(" ( 누적 ").append(container.getAudiAcc()).append("명 )").toString();

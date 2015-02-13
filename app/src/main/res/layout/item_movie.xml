@@ -33,7 +33,8 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/black_alpha_87"
-                android:textSize="@dimen/text_primary_size" />
+                android:textSize="@dimen/text_primary_size"
+                android:autoText="true" />
 
 
             <TextView

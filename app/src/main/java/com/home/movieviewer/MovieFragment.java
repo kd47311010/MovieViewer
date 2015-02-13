@@ -78,6 +78,7 @@ public class MovieFragment extends Fragment {
         return simpleDateFormat.format(calendar.getTime());
     }
 
+
     private class RequestDataTask extends AsyncTask<ApiImpl, Void, List<ResultContainer>> {
 
         private List<ResultContainer> getCommonCodeFromJson(String jsonStr) {
