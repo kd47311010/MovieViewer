@@ -60,6 +60,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         ResultContainer container = mResultContainerList.get(position);
         View itemView = holder.getView();
         TextView primaryTextView = (TextView) itemView.findViewById(R.id.content_primary);
@@ -79,7 +80,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         primaryTextView.setText(primaryText);
         secondaryTextView.setText(secondaryText);
         threeTextView.setText(threeText);
-        thumbnailView.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.ic_action_toggle_star));
+        thumbnailView.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.ic_action_turned_in_not));
     }
 
 
