@@ -1,66 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="104dp"
+    android:layout_height="288dp"
     android:layout_marginBottom="@dimen/keyline_first_minus">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/content_image"
-            android:layout_width="@dimen/list_image_size_width"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop" />
+        <RelativeLayout
+            android:id="@+id/movie_detail_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/content_image"
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:scaleType="centerCrop" />
+
+            <RelativeLayout
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="76dp">
+
+                <ImageView
+                    android:id="@+id/content_rank_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/circle_accent_background" />
+
+                <TextView
+                    android:id="@+id/content_rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white_alpha_87"
+                    android:textSize="@dimen/text_primary_large_size" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_below="@+id/content_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/keyline_first"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/content_primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/black_alpha_87"
+                    android:textSize="@dimen/text_primary_size" />
+
+                <TextView
+                    android:id="@+id/content_secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_line_spacing"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="@dimen/text_line_spacing"
+                    android:maxLines="3"
+                    android:textColor="@color/black_alpha_54"
+                    android:textSize="@dimen/text_secondary_size" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black_alpha_12" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/keyline_first"
-            android:layout_marginRight="@dimen/keyline_first"
-            android:layout_toRightOf="@+id/content_image"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/movie_detail_panel"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <TextView
-                android:id="@+id/content_primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/black_alpha_87"
-                android:textSize="@dimen/text_primary_size"
-                android:autoText="true" />
-
-
-            <TextView
-                android:id="@+id/content_secondary"
-                android:layout_width="match_parent"
+            <Button
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/text_line_spacing"
-                android:ellipsize="end"
-                android:lineSpacingExtra="@dimen/text_line_spacing"
-                android:maxLines="3"
-                android:textColor="@color/black_alpha_54"
-                android:textSize="@dimen/text_secondary_size" />
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="즐겨찾기"
+                android:textColor="@color/black_alpha_54" />
 
-            <TextView
-                android:id="@+id/content_three"
-                android:layout_width="match_parent"
+            <View
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="4dp"
-                android:ellipsize="end"
-                android:lineSpacingExtra="4dp"
-                android:maxLines="4"
-                android:textColor="@color/black_alpha_54"
-                android:textSize="14sp" />
+                android:background="@color/black_alpha_12" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="공유하기"
+                android:textColor="@color/black_alpha_54" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>
