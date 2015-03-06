@@ -36,6 +36,7 @@
     <dimen name="list_height">88dp</dimen>
     <dimen name="list_image_size_height">56dp</dimen>
     <dimen name="list_image_size_width">64dp</dimen>
+    <dimen name="text_primary_large_size">20sp</dimen>
     <dimen name="text_primary_size">16sp</dimen>
     <dimen name="text_secondary_size">14sp</dimen>
     <dimen name="text_line_spacing">4dp</dimen>
