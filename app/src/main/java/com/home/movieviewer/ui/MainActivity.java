@@ -1,4 +1,4 @@
-package com.home.movieviewer;
+package com.home.movieviewer.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.home.movieviewer.R;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     private Toolbar mToolbar;

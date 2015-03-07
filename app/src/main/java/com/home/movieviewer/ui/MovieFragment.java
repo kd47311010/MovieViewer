@@ -1,4 +1,4 @@
-package com.home.movieviewer;
+package com.home.movieviewer.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.home.movieviewer.api.ApiImpl;
+import com.home.movieviewer.R;
+import com.home.movieviewer.ResultContainer;
 import com.home.movieviewer.api.KobisApi;
+import com.home.movieviewer.api.TheMovieDbApi;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -63,14 +65,12 @@ public class MovieFragment extends Fragment {
         return rootView;
     }
 
-    private void updateData(){
+    private void updateData() {
         Log.d("MovieFragment", getToday());
-        KobisApi kobisApi = new KobisApi(KobisApi.TYPE_DAILY_BOX_OFFICE);
-        kobisApi.setParams(getToday());
-        new RequestDataTask().execute(kobisApi);
+        new RequestTask().execute(KobisApi.TYPE_DAILY_BOX_OFFICE);
     }
 
-    private String getToday(){
+    private String getToday() {
         final String dateFormat = "yyyyMMdd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
         Calendar calendar = Calendar.getInstance();
@@ -79,7 +79,94 @@ public class MovieFragment extends Fragment {
     }
 
 
-    private class RequestDataTask extends AsyncTask<ApiImpl, Void, List<ResultContainer>> {
+    private class RequestTask extends AsyncTask<Integer, Void, List<ResultContainer>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (!mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        }
+
+        @Override
+        protected List<ResultContainer> doInBackground(Integer... params) {
+            OkHttpClient okHttpClient = new OkHttpClient();
+            String result = null;
+            List<ResultContainer> resultContainers = null;
+            try {
+                KobisApi kobisApi = new KobisApi(params[0]);
+                kobisApi.setParams(getToday());
+                result = requestDataFromURL(okHttpClient, kobisApi.getUri().toString());
+                resultContainers = getCommonCodeFromJson(result);
+
+                TheMovieDbApi theMovieDbApi = null;
+                String movieId = null;
+                String posterUrl = null;
+                for (ResultContainer container : resultContainers) {
+                    theMovieDbApi = new TheMovieDbApi(TheMovieDbApi.TYPE_SEARCH_MOVIE);
+                    theMovieDbApi.setParams(container.getMovieNm());
+
+                    result = requestDataFromURL(okHttpClient, theMovieDbApi.getUri().toString());
+
+                    movieId = TheMovieDbApi.getMovieIdFromJson(result);
+                    if(movieId == null)
+                        continue;
+
+                    posterUrl = TheMovieDbApi.getMoviePosterUrlFromJson(result);
+
+//                    theMovieDbApi.setType(TheMovieDbApi.TYPE_MOVIE_IMAGE);
+//                    theMovieDbApi.setParams(movieId, "ko");
+//
+//                    result = requestDataFromURL(okHttpClient, theMovieDbApi.getUri().toString());
+//
+//                    String filePath = TheMovieDbApi.getMovieImageUrlFromJson(result, 0);
+                    container.setThumbnailUrl(TheMovieDbApi.createImageUrl(posterUrl));
+                }
+                return resultContainers;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<ResultContainer> resultContainers) {
+            super.onPostExecute(resultContainers);
+            // Do something
+            mAdapter.clearItem();
+            if (resultContainers != null) {
+                for (ResultContainer container : resultContainers) {
+                    mAdapter.addItem(container);
+                }
+            }
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+
+        private String requestDataFromURL(OkHttpClient okHttpClient, String url) throws IOException {
+            Request request = null;
+            Response response = null;
+
+            request = new Request.Builder()
+                    .url(url)
+                    .build();
+            response = okHttpClient.newCall(request).execute();
+            return response.body().string();
+        }
+
+//        private String getThumbnailUrlFromJson(String jsonStr) {
+//            final String KEY_ITEM = "item";
+//            final String KEY_THUMBNAIL = "thumbnail";
+//            try {
+//                Log.d("MovieFragment", jsonStr);
+//                JSONObject jsonObject = new JSONObject(jsonStr);
+//                JSONObject itemObject = jsonObject.getJSONObject(KEY_ITEM);
+//                return itemObject.getString(KEY_THUMBNAIL);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
 
         private List<ResultContainer> getCommonCodeFromJson(String jsonStr) {
             final String OBJECT_BOX_OFFICE_RESULT = "boxOfficeResult";
@@ -118,49 +205,6 @@ public class MovieFragment extends Fragment {
                 e.printStackTrace();
             }
             return containers;
-        }
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (!mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        }
-
-        @Override
-        protected List<ResultContainer> doInBackground(ApiImpl... params) {
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Response response = null;
-            String result = null;
-            try {
-                Request request = new Request.Builder()
-                        .url(params[0].getUri().toString())
-                        .build();
-                response = okHttpClient.newCall(request).execute();
-                result = response.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (params[0].getType() == KobisApi.TYPE_DAILY_BOX_OFFICE) {
-                return getCommonCodeFromJson(result);
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<ResultContainer> resultContainers) {
-            super.onPostExecute(resultContainers);
-            // Do something
-            mAdapter.clearItem();
-            if (resultContainers != null) {
-                for (ResultContainer container : resultContainers) {
-                    mAdapter.addItem(container);
-                }
-            }
-            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 }

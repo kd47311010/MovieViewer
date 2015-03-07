@@ -21,7 +21,8 @@
                 android:id="@+id/content_image"
                 android:layout_width="match_parent"
                 android:layout_height="104dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@color/colorPrimaryLight" />
 
             <RelativeLayout
                 android:layout_width="56dp"
