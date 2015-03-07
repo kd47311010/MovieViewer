@@ -1,4 +1,4 @@
-package com.home.movieviewer;
+package com.home.movieviewer.ui;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.home.movieviewer.R;
+import com.home.movieviewer.ResultContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +39,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             mItemView = itemView;
         }
 
-        public View getView() { return mItemView; }
+        public View getView() {
+            return mItemView;
+        }
     }
 
     public void clearItem() {
@@ -80,14 +86,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         primaryTextView.setText(primaryText);
         secondaryTextView.setText(secondaryText);
         rankTextView.setText(container.getRank());
-        thumbnailView.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.ic_action_turned_in_not));
+        Glide.with(mActivity)
+                .load(container.getThumbnailUrl())
+                .crossFade()
+                .centerCrop()
+                .placeholder(R.color.colorPrimaryLight)
+                .into(thumbnailView);
         setRankImage(rankImageView);
     }
 
     private void setRankImage(ImageView view) {
         Bitmap bitmap = null;
         view.setColorFilter(mActivity.getResources().getColor(R.color.colorAccent));
-        if(view.getDrawable() instanceof  BitmapDrawable) {
+        if (view.getDrawable() instanceof BitmapDrawable) {
             bitmap = ((BitmapDrawable) view.getDrawable()).getBitmap();
             setCircleImage(bitmap, view);
         }

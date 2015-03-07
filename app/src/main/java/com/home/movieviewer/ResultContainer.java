@@ -12,6 +12,16 @@ public class ResultContainer {
     private String audiCnt;
     private String audiInten;
     private String audiAcc;
+    private String thumbnailUrl;
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
 
     public ResultContainer() {
     }
@@ -56,15 +66,27 @@ public class ResultContainer {
         this.openDt = openDt;
     }
 
-    public String getAudiCnt() { return audiCnt; }
+    public String getAudiCnt() {
+        return audiCnt;
+    }
 
-    public void setAudiCnt(String audiCnt) { this.audiCnt = audiCnt; }
+    public void setAudiCnt(String audiCnt) {
+        this.audiCnt = audiCnt;
+    }
 
-    public String getAudiInten() { return audiInten; }
+    public String getAudiInten() {
+        return audiInten;
+    }
 
-    public void setAudiInten(String audiInten) { this.audiInten = audiInten; }
+    public void setAudiInten(String audiInten) {
+        this.audiInten = audiInten;
+    }
 
-    public String getAudiAcc() { return audiAcc; }
+    public String getAudiAcc() {
+        return audiAcc;
+    }
 
-    public void setAudiAcc(String audiAcc) { this.audiAcc = audiAcc; }
+    public void setAudiAcc(String audiAcc) {
+        this.audiAcc = audiAcc;
+    }
 }
