@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.home.movieviewer.R;
-import com.home.movieviewer.ResultContainer;
+import com.home.movieviewer.beans.ResultBean;
 import com.home.movieviewer.api.KobisApi;
 import com.home.movieviewer.api.TheMovieDbApi;
 import com.squareup.okhttp.OkHttpClient;
@@ -79,7 +79,7 @@ public class MovieFragment extends Fragment {
     }
 
 
-    private class RequestTask extends AsyncTask<Integer, Void, List<ResultContainer>> {
+    private class RequestTask extends AsyncTask<Integer, Void, List<ResultBean>> {
 
         @Override
         protected void onPreExecute() {
@@ -90,20 +90,20 @@ public class MovieFragment extends Fragment {
         }
 
         @Override
-        protected List<ResultContainer> doInBackground(Integer... params) {
+        protected List<ResultBean> doInBackground(Integer... params) {
             OkHttpClient okHttpClient = new OkHttpClient();
             String result = null;
-            List<ResultContainer> resultContainers = null;
+            List<ResultBean> resultBeans = null;
             try {
                 KobisApi kobisApi = new KobisApi(params[0]);
                 kobisApi.setParams(getToday());
                 result = requestDataFromURL(okHttpClient, kobisApi.getUri().toString());
-                resultContainers = getCommonCodeFromJson(result);
+                resultBeans = getCommonCodeFromJson(result);
 
                 TheMovieDbApi theMovieDbApi = null;
                 String movieId = null;
                 String posterUrl = null;
-                for (ResultContainer container : resultContainers) {
+                for (ResultBean container : resultBeans) {
                     theMovieDbApi = new TheMovieDbApi(TheMovieDbApi.TYPE_SEARCH_MOVIE);
                     theMovieDbApi.setParams(container.getMovieNm());
 
@@ -123,7 +123,7 @@ public class MovieFragment extends Fragment {
 //                    String filePath = TheMovieDbApi.getMovieImageUrlFromJson(result, 0);
                     container.setThumbnailUrl(TheMovieDbApi.createImageUrl(posterUrl));
                 }
-                return resultContainers;
+                return resultBeans;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,12 +131,12 @@ public class MovieFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<ResultContainer> resultContainers) {
-            super.onPostExecute(resultContainers);
+        protected void onPostExecute(List<ResultBean> resultBeans) {
+            super.onPostExecute(resultBeans);
             // Do something
             mAdapter.clearItem();
-            if (resultContainers != null) {
-                for (ResultContainer container : resultContainers) {
+            if (resultBeans != null) {
+                for (ResultBean container : resultBeans) {
                     mAdapter.addItem(container);
                 }
             }
@@ -168,11 +168,11 @@ public class MovieFragment extends Fragment {
 //            return null;
 //        }
 
-        private List<ResultContainer> getCommonCodeFromJson(String jsonStr) {
+        private List<ResultBean> getCommonCodeFromJson(String jsonStr) {
             final String OBJECT_BOX_OFFICE_RESULT = "boxOfficeResult";
             final String ARRAY_DAILY_BOX_OFFICE_LIST = "dailyBoxOfficeList";
 
-            List<ResultContainer> containers = new ArrayList<>();
+            List<ResultBean> containers = new ArrayList<>();
             try {
                 JSONObject jsonObject = new JSONObject(jsonStr);
                 JSONObject boxOfficeResult = jsonObject.getJSONObject(OBJECT_BOX_OFFICE_RESULT);
@@ -189,17 +189,17 @@ public class MovieFragment extends Fragment {
                     String audiInten = object.getString("audiInten"); //관객 수 증감 분
                     String audiAcc = object.getString("audiAcc"); //누적 관객 수
 
-                    ResultContainer resultContainer = new ResultContainer();
-                    resultContainer.setRank(rank);
-                    resultContainer.setRankInten(rankInten);
-                    resultContainer.setRankOldAndNew(rankOldAndNew);
-                    resultContainer.setMovieNm(movieNm);
-                    resultContainer.setOpenDt(openDt);
-                    resultContainer.setAudiCnt(audiCnt);
-                    resultContainer.setAudiInten(audiInten);
-                    resultContainer.setAudiAcc(audiAcc);
+                    ResultBean resultBean = new ResultBean();
+                    resultBean.setRank(rank);
+                    resultBean.setRankInten(rankInten);
+                    resultBean.setRankOldAndNew(rankOldAndNew);
+                    resultBean.setMovieNm(movieNm);
+                    resultBean.setOpenDt(openDt);
+                    resultBean.setAudiCnt(audiCnt);
+                    resultBean.setAudiInten(audiInten);
+                    resultBean.setAudiAcc(audiAcc);
 
-                    containers.add(resultContainer);
+                    containers.add(resultBean);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

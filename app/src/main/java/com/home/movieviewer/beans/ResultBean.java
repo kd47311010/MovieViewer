@@ -1,9 +1,9 @@
-package com.home.movieviewer;
+package com.home.movieviewer.beans;
 
 /**
  * Created by P400 on 2015-02-05.
  */
-public class ResultContainer {
+public class ResultBean {
     private String rank;
     private String rankInten;
     private String rankOldAndNew;
@@ -23,7 +23,7 @@ public class ResultContainer {
     }
 
 
-    public ResultContainer() {
+    public ResultBean() {
     }
 
     public String getRank() {

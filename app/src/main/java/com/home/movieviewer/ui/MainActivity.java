@@ -88,6 +88,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new MovieFragment())
                     .commit();
+            setTitle(R.string.activity_main_name);
         }
         initToolbar();
         initDrawer();
