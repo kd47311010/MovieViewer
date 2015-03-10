@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.home.movieviewer.R;
-import com.home.movieviewer.ResultContainer;
+import com.home.movieviewer.beans.ResultBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +23,11 @@ import java.util.List;
  * Created by P400 on 2015-01-29.
  */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
-    private List<ResultContainer> mResultContainerList;
+    private List<ResultBean> mResultBeanList;
     private Activity mActivity;
 
     public MovieAdapter(Activity mActivity) {
-        mResultContainerList = new ArrayList<ResultContainer>();
+        mResultBeanList = new ArrayList<ResultBean>();
         this.mActivity = mActivity;
     }
 
@@ -45,17 +45,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     public void clearItem() {
-        mResultContainerList.clear();
+        mResultBeanList.clear();
         notifyDataSetChanged();
     }
 
-    public void addItem(ResultContainer container) {
-        mResultContainerList.add(container);
+    public void addItem(ResultBean container) {
+        mResultBeanList.add(container);
         notifyDataSetChanged();
     }
 
     public void removeItem(int index) {
-        mResultContainerList.remove(index);
+        mResultBeanList.remove(index);
         notifyDataSetChanged();
     }
 
@@ -68,7 +68,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        ResultContainer container = mResultContainerList.get(position);
+        ResultBean container = mResultBeanList.get(position);
         View itemView = holder.getView();
         TextView primaryTextView = (TextView) itemView.findViewById(R.id.content_primary);
         TextView secondaryTextView = (TextView) itemView.findViewById(R.id.content_secondary);
@@ -115,6 +115,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mResultContainerList.size();
+        return mResultBeanList.size();
     }
 }
