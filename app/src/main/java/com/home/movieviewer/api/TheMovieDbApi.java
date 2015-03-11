@@ -8,7 +8,10 @@ import org.json.JSONObject;
 
 /**
  * Created by namhyun on 2015-02-11.
+ *
+ * Unused class, will be deleted
  */
+@Deprecated
 public class TheMovieDbApi implements ApiImpl {
     public static final int TYPE_SEARCH_MOVIE = 100;
     public static final int TYPE_MOVIE_IMAGE = 101;
