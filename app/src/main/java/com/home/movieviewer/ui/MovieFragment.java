@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.home.movieviewer.R;
-import com.home.movieviewer.beans.ResultBean;
 import com.home.movieviewer.api.KobisApi;
 import com.home.movieviewer.api.TheMovieDbApi;
+import com.home.movieviewer.beans.ResultBean;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -66,8 +66,11 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateData() {
-        Log.d("MovieFragment", getToday());
+        long startTime = System.currentTimeMillis();
+//        Log.d("MovieFragment", getToday());
         new RequestTask().execute(KobisApi.TYPE_DAILY_BOX_OFFICE);
+
+
     }
 
     private String getToday() {
@@ -80,10 +83,13 @@ public class MovieFragment extends Fragment {
 
 
     private class RequestTask extends AsyncTask<Integer, Void, List<ResultBean>> {
+        long startTime = 0;
+        long endTime = 0;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            startTime = System.currentTimeMillis();
             if (!mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(true);
             }
@@ -110,11 +116,10 @@ public class MovieFragment extends Fragment {
                     result = requestDataFromURL(okHttpClient, theMovieDbApi.getUri().toString());
 
                     movieId = TheMovieDbApi.getMovieIdFromJson(result);
-                    if(movieId == null)
+                    if (movieId == null)
                         continue;
 
                     posterUrl = TheMovieDbApi.getMoviePosterUrlFromJson(result);
-
 //                    theMovieDbApi.setType(TheMovieDbApi.TYPE_MOVIE_IMAGE);
 //                    theMovieDbApi.setParams(movieId, "ko");
 //
@@ -141,6 +146,8 @@ public class MovieFragment extends Fragment {
                 }
             }
             mSwipeRefreshLayout.setRefreshing(false);
+            endTime = System.currentTimeMillis();
+            Log.d("MovieFragment", "Update Time :" + (endTime - startTime));
         }
 
         private String requestDataFromURL(OkHttpClient okHttpClient, String url) throws IOException {

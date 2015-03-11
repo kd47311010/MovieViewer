@@ -4,7 +4,10 @@ import android.net.Uri;
 
 /**
  * Created by namhyun on 2015-02-11.
+ *
+ * Unused class, will be deleted
  */
+@Deprecated
 public class KobisApi implements ApiImpl {
     public static final int TYPE_COMMON_CODE = 100;
     public static final int TYPE_DAILY_BOX_OFFICE = 101;

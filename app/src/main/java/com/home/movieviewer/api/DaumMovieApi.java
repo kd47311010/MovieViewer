@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 
 /**
  * Created by namhyun on 2015-03-06.
+ *
+ * Unused class, will be deleted
  */
 @Deprecated
 public class DaumMovieApi implements ApiImpl {
