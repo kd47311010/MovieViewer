@@ -7,28 +7,20 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.home.movieviewer.R;
-import com.home.movieviewer.api.KobisApi;
-import com.home.movieviewer.api.TheMovieDbApi;
-import com.home.movieviewer.beans.ResultBean;
+import com.home.movieviewer.beans.MovieBean;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by namhyun on 2015-01-23.
@@ -66,11 +58,7 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateData() {
-        long startTime = System.currentTimeMillis();
-//        Log.d("MovieFragment", getToday());
-        new RequestTask().execute(KobisApi.TYPE_DAILY_BOX_OFFICE);
-
-
+        new RequestTask().execute();
     }
 
     private String getToday() {
@@ -81,73 +69,44 @@ public class MovieFragment extends Fragment {
         return simpleDateFormat.format(calendar.getTime());
     }
 
-
-    private class RequestTask extends AsyncTask<Integer, Void, List<ResultBean>> {
-        long startTime = 0;
-        long endTime = 0;
+    private class RequestTask extends AsyncTask<Void, Void, MovieBean[]> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            startTime = System.currentTimeMillis();
             if (!mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(true);
             }
         }
 
         @Override
-        protected List<ResultBean> doInBackground(Integer... params) {
+        protected MovieBean[] doInBackground(Void... params) {
+            final String BASE_URL = "http://carbide-primer-853.appspot.com/moviemove";
             OkHttpClient okHttpClient = new OkHttpClient();
+            MovieBean[] beans = null;
             String result = null;
-            List<ResultBean> resultBeans = null;
+
             try {
-                KobisApi kobisApi = new KobisApi(params[0]);
-                kobisApi.setParams(getToday());
-                result = requestDataFromURL(okHttpClient, kobisApi.getUri().toString());
-                resultBeans = getCommonCodeFromJson(result);
 
-                TheMovieDbApi theMovieDbApi = null;
-                String movieId = null;
-                String posterUrl = null;
-                for (ResultBean container : resultBeans) {
-                    theMovieDbApi = new TheMovieDbApi(TheMovieDbApi.TYPE_SEARCH_MOVIE);
-                    theMovieDbApi.setParams(container.getMovieNm());
-
-                    result = requestDataFromURL(okHttpClient, theMovieDbApi.getUri().toString());
-
-                    movieId = TheMovieDbApi.getMovieIdFromJson(result);
-                    if (movieId == null)
-                        continue;
-
-                    posterUrl = TheMovieDbApi.getMoviePosterUrlFromJson(result);
-//                    theMovieDbApi.setType(TheMovieDbApi.TYPE_MOVIE_IMAGE);
-//                    theMovieDbApi.setParams(movieId, "ko");
-//
-//                    result = requestDataFromURL(okHttpClient, theMovieDbApi.getUri().toString());
-//
-//                    String filePath = TheMovieDbApi.getMovieImageUrlFromJson(result, 0);
-                    container.setThumbnailUrl(TheMovieDbApi.createImageUrl(posterUrl));
-                }
-                return resultBeans;
+                result = requestDataFromURL(okHttpClient, BASE_URL);
+                Gson gson = new Gson();
+                beans = gson.fromJson(result, MovieBean[].class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return beans;
         }
 
         @Override
-        protected void onPostExecute(List<ResultBean> resultBeans) {
-            super.onPostExecute(resultBeans);
-            // Do something
+        protected void onPostExecute(MovieBean[] movieBeans) {
+            super.onPostExecute(movieBeans);
             mAdapter.clearItem();
-            if (resultBeans != null) {
-                for (ResultBean container : resultBeans) {
+            if (movieBeans != null) {
+                for (MovieBean container : movieBeans) {
                     mAdapter.addItem(container);
                 }
             }
             mSwipeRefreshLayout.setRefreshing(false);
-            endTime = System.currentTimeMillis();
-            Log.d("MovieFragment", "Update Time :" + (endTime - startTime));
         }
 
         private String requestDataFromURL(OkHttpClient okHttpClient, String url) throws IOException {
@@ -159,59 +118,6 @@ public class MovieFragment extends Fragment {
                     .build();
             response = okHttpClient.newCall(request).execute();
             return response.body().string();
-        }
-
-//        private String getThumbnailUrlFromJson(String jsonStr) {
-//            final String KEY_ITEM = "item";
-//            final String KEY_THUMBNAIL = "thumbnail";
-//            try {
-//                Log.d("MovieFragment", jsonStr);
-//                JSONObject jsonObject = new JSONObject(jsonStr);
-//                JSONObject itemObject = jsonObject.getJSONObject(KEY_ITEM);
-//                return itemObject.getString(KEY_THUMBNAIL);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-
-        private List<ResultBean> getCommonCodeFromJson(String jsonStr) {
-            final String OBJECT_BOX_OFFICE_RESULT = "boxOfficeResult";
-            final String ARRAY_DAILY_BOX_OFFICE_LIST = "dailyBoxOfficeList";
-
-            List<ResultBean> containers = new ArrayList<>();
-            try {
-                JSONObject jsonObject = new JSONObject(jsonStr);
-                JSONObject boxOfficeResult = jsonObject.getJSONObject(OBJECT_BOX_OFFICE_RESULT);
-                JSONArray dailyBoxOfficeList = boxOfficeResult.getJSONArray(ARRAY_DAILY_BOX_OFFICE_LIST);
-
-                for (int i = 0; i < dailyBoxOfficeList.length(); i++) {
-                    JSONObject object = dailyBoxOfficeList.getJSONObject(i);
-                    String rank = object.getString("rank"); //순위
-                    String rankInten = object.getString("rankInten"); //전일대비 증감분
-                    String rankOldAndNew = object.getString("rankOldAndNew"); //랭크 신규 진입 여부
-                    String movieNm = object.getString("movieNm"); //영화명
-                    String openDt = object.getString("openDt"); //개봉일
-                    String audiCnt = object.getString("audiCnt"); //해당일 관객 수
-                    String audiInten = object.getString("audiInten"); //관객 수 증감 분
-                    String audiAcc = object.getString("audiAcc"); //누적 관객 수
-
-                    ResultBean resultBean = new ResultBean();
-                    resultBean.setRank(rank);
-                    resultBean.setRankInten(rankInten);
-                    resultBean.setRankOldAndNew(rankOldAndNew);
-                    resultBean.setMovieNm(movieNm);
-                    resultBean.setOpenDt(openDt);
-                    resultBean.setAudiCnt(audiCnt);
-                    resultBean.setAudiInten(audiInten);
-                    resultBean.setAudiAcc(audiAcc);
-
-                    containers.add(resultBean);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return containers;
         }
     }
 }
