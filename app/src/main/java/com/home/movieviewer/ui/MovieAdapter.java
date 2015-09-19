@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.home.movieviewer.Config;
 import com.home.movieviewer.R;
 import com.home.movieviewer.beans.MovieBean;
 
@@ -30,19 +31,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public MovieAdapter(Activity mActivity) {
         mResultBeanList = new ArrayList<MovieBean>();
         this.mActivity = mActivity;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private View mItemView = null;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            mItemView = itemView;
-        }
-
-        public View getView() {
-            return mItemView;
-        }
     }
 
     public void clearItem() {
@@ -97,11 +85,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     private String createImageUrl(String filePath) {
-        final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-        final String FILE_SIZE_ORIGINAL = "original";
-
-        Uri.Builder builder = Uri.parse(IMAGE_BASE_URL).buildUpon()
-                .appendPath(FILE_SIZE_ORIGINAL).appendPath(filePath.substring(1, filePath.length()));
+        Uri.Builder builder = Uri.parse(Config.ThumbnailImageService.BASE_URL).buildUpon()
+                .appendPath(Config.ThumbnailImageService.FILE_SIZE_ORIGINAL).appendPath(filePath.substring(1, filePath.length()));
         return builder.build().toString();
     }
 
@@ -122,9 +107,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         view.setImageDrawable(bitmapDrawable);
     }
 
-
     @Override
     public int getItemCount() {
         return mResultBeanList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private View mItemView = null;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mItemView = itemView;
+        }
+
+        public View getView() {
+            return mItemView;
+        }
     }
 }

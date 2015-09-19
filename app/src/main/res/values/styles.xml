@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
@@ -8,16 +9,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="MyTheme.WithNavi" parent="@style/MyTheme"/>
+    <style name="MyTheme.WithNavi" parent="@style/MyTheme" />
 
     <style name="MyTheme.FullScreen">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="Widget"/>
+    <style name="Widget" />
 
-    <style name="Widget.MyTheme"/>
+    <style name="Widget.MyTheme" />
 
     <style name="Widget.MyTheme.NavigationDrawerItem">
         <item name="android:clickable">true</item>
@@ -65,6 +66,5 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:focusable">true</item>
     </style>
-
 
 </resources>

@@ -87,7 +87,6 @@ public class MovieFragment extends Fragment {
             String result = null;
 
             try {
-
                 result = requestDataFromURL(okHttpClient, BASE_URL);
                 Gson gson = new Gson();
                 beans = gson.fromJson(result, MovieBean[].class);
@@ -112,7 +111,6 @@ public class MovieFragment extends Fragment {
         private String requestDataFromURL(OkHttpClient okHttpClient, String url) throws IOException {
             Request request = null;
             Response response = null;
-
             request = new Request.Builder()
                     .url(url)
                     .build();

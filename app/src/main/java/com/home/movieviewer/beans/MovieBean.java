@@ -6,16 +6,16 @@ import java.util.List;
  * Created by namhyun on 2015-03-11.
  */
 public class MovieBean {
-    public String audiInten;
-    public String rankOldAndNew;
-    public String thumbnailUrl;
-    public String rankInten;
-    public String rank;
-    public String movieNm;
-    public String openDt;
-    public String audiCnt;
-    public String audiAcc;
-    public DetailBean detail;
+    private String audiInten;
+    private String rankOldAndNew;
+    private String thumbnailUrl;
+    private String rankInten;
+    private String rank;
+    private String movieNm;
+    private String openDt;
+    private String audiCnt;
+    private String audiAcc;
+    private DetailBean detail;
 
     public String getAudiInten() {
         return audiInten;
@@ -58,9 +58,9 @@ public class MovieBean {
     }
 
     public class DetailBean {
-        public String watchGradeNm;
-        public String showTm;
-        public List<String> genreNm;
+        private String watchGradeNm;
+        private String showTm;
+        private List<String> genreNm;
 
         public String getWatchGradeNm() {
             return watchGradeNm;
