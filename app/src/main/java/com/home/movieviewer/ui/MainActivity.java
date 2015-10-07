@@ -1,7 +1,6 @@
 package com.home.movieviewer.ui;
 
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,11 +10,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.home.movieviewer.R;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -23,29 +21,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String TAG = this.getClass().getSimpleName();
 
     protected void initToolbar() {
+        Log.d(TAG, "initToolbar");
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
     }
 
     protected void initDrawer() {
-        Log.d(TAG, "initNaviDrawer");
+        Log.d(TAG, "initDrawer");
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final View drawerList = findViewById(R.id.left_drawer);
-
         mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
+                this,
+                mDrawerLayout,
                 mToolbar,
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
+                R.string.drawer_open,
+                R.string.drawer_close
         ) {
             public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
 
             public void onDrawerClosed(View view) {
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
         };
 
@@ -55,46 +53,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-
-        View allVideos = drawerList.findViewById(R.id.left_drawer_home);
-        View myVideos = drawerList.findViewById(R.id.left_drawer_my_movies);
-        View shopping = drawerList.findViewById(R.id.left_drawer_purchase_Movies);
-        View check = drawerList.findViewById(R.id.left_drawer_check_tickets);
-        View mypage = drawerList.findViewById(R.id.left_drawer_my_page);
-        View settings = drawerList.findViewById(R.id.left_drawer_settings);
-        View help = drawerList.findViewById(R.id.left_drawer_help);
-
-        allVideos.setOnClickListener(this);
-        myVideos.setOnClickListener(this);
-        shopping.setOnClickListener(this);
-        check.setOnClickListener(this);
-        mypage.setOnClickListener(this);
-        settings.setOnClickListener(this);
-        help.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.left_drawer_home:
-                break;
-        }
-        mDrawerLayout.closeDrawers();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Support status bar color (lollipop and latest version)
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        }
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new MovieFragment())
                     .commit();
-            setTitle(R.string.activity_main_name);
+//            setTitle(R.string.activity_main_name);
         }
         initToolbar();
         initDrawer();

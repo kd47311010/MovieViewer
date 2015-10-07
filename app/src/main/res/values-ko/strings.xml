@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">무비무브</string>
+    <string name="navigation_help">도움말</string>
+    <string name="navigation_home">홈</string>
+    <string name="navigation_my_movie">내 영화</string>
+    <string name="navigation_my_page">마이 페이지</string>
+    <string name="navigation_purchase_list">구매 내역</string>
+    <string name="navigation_reservation_check">예약 확인</string>
+    <string name="navigation_settings">설정</string>
+</resources>
