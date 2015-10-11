@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group_main"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_home"
+            android:checked="true"
+            android:icon="@drawable/ic_navigation_home"
+            android:title="@string/navigation_home" />
+        <item
+            android:id="@+id/navigation_my_movie"
+            android:icon="@drawable/ic_navigation_my_movie"
+            android:title="@string/navigation_my_movie" />
+        <item
+            android:id="@+id/navigation_purchase_list"
+            android:icon="@drawable/ic_navigation_purchase_list"
+            android:title="@string/navigation_purchase_list" />
+        <item
+            android:id="@+id/navigation_reservation_check"
+            android:icon="@drawable/ic_navigation_reservation_check"
+            android:title="@string/navigation_reservation_check" />
+        <item
+            android:id="@+id/navigation_my_page"
+            android:icon="@drawable/ic_navigation_my_page"
+            android:title="@string/navigation_my_page" />
+    </group>
+    <group
+        android:id="@+id/group_sub"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/navigation_settings"
+            android:icon="@drawable/ic_navigation_settings"
+            android:title="@string/navigation_settings" />
+        <item
+            android:id="@+id/navigation_help"
+            android:icon="@drawable/ic_navigation_help"
+            android:title="@string/navigation_help" />
+    </group>
+</menu>

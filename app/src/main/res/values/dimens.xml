@@ -26,11 +26,10 @@
     <dimen name="content_title_20sp">20sp</dimen>
     <dimen name="content_subtitle_16sp">16sp</dimen>
     <dimen name="content_body_14sp">14sp</dimen>
-    <dimen name="content_cpation_12sp">12sp</dimen>
+    <dimen name="content_caption_12sp">12sp</dimen>
 
     <!--navigation drawer-->
-    <dimen name="navdrawer_profile_image_size">40dp</dimen>
-
+    <dimen name="navigation_margin_top">16dp</dimen>
 
     <!--list-->
     <dimen name="list_height">88dp</dimen>
@@ -45,5 +44,9 @@
     <dimen name="fab_size">56dp</dimen>
     <dimen name="half_fab_size">28dp</dimen>
     <dimen name="fab_margin_with_appbar">28dp</dimen>
+
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="navigation_drawer_width">240dp</dimen>
 
 </resources>
