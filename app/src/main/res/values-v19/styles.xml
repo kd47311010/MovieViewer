@@ -2,7 +2,7 @@
 <resources>
 
     <style name="BaseTheme.WithNavi" parent="@style/BaseTheme">
-        <item name="android:windowTranslucentStatus">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
     </style>
 
 </resources>
