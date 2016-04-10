@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.home.movieviewer.R;
 import com.home.movieviewer.beans.MovieBean;
 import com.squareup.okhttp.OkHttpClient;
@@ -90,7 +91,7 @@ public class MovieFragment extends Fragment {
                 result = requestDataFromURL(okHttpClient, BASE_URL);
                 Gson gson = new Gson();
                 beans = gson.fromJson(result, MovieBean[].class);
-            } catch (IOException e) {
+            } catch (IOException | JsonSyntaxException e) {
                 e.printStackTrace();
             }
             return beans;
