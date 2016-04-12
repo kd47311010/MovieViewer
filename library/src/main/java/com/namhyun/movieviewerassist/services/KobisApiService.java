@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 public interface KobisApiService {
-    String BASE_URL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest";
+    String BASE_URL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/";
 
     @GET("boxoffice/searchDailyBoxOfficeList.json")
     Observable<BoxOfficeList> searchDailyBoxOfficeList(@Query("key") String key, @Query("targetDt") String searchDate);

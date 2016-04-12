@@ -8,7 +8,7 @@ public class DetailInfo {
     @SerializedName("movieInfoResult")
     private Result result;
 
-    public MovieInfo getMovieInfo() {
+    public MovieInfo getInfo() {
         return result.getInfo();
     }
 
