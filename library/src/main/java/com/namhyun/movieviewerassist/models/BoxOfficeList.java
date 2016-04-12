@@ -8,7 +8,7 @@ public class BoxOfficeList {
     @SerializedName("boxOfficeResult")
     private Result result;
 
-    public List<BoxOfficeMovie> getBoxOfficeList() {
+    public List<BoxOfficeMovie> get() {
         return result.getList();
     }
 
