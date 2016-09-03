@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.home.movieviewer.Config;
 import com.home.movieviewer.R;
-import com.home.movieviewer.beans.MovieBean;
+import com.namhyun.movieviewerassist.models.BoxOfficeList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +25,11 @@ import java.util.List;
  * Created by P400 on 2015-01-29.
  */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
-    private List<MovieBean> mResultBeanList;
+    private List<BoxOfficeList.BoxOfficeMovie> mResultBeanList;
     private Activity mActivity;
 
     public MovieAdapter(Activity mActivity) {
-        mResultBeanList = new ArrayList<MovieBean>();
+        mResultBeanList = new ArrayList<>();
         this.mActivity = mActivity;
     }
 
@@ -38,7 +38,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public void addItem(MovieBean container) {
+    public void addItem(BoxOfficeList.BoxOfficeMovie container) {
         mResultBeanList.add(container);
         notifyDataSetChanged();
     }
@@ -57,7 +57,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        MovieBean container = mResultBeanList.get(position);
+        BoxOfficeList.BoxOfficeMovie container = mResultBeanList.get(position);
         View itemView = holder.getView();
         TextView primaryTextView = (TextView) itemView.findViewById(R.id.content_primary);
         TextView secondaryTextView = (TextView) itemView.findViewById(R.id.content_secondary);
@@ -75,12 +75,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         primaryTextView.setText(primaryText);
         secondaryTextView.setText(secondaryText);
         rankTextView.setText(container.getRank());
-        Glide.with(mActivity)
-                .load(createImageUrl(container.getThumbnailUrl()))
-                .crossFade()
-                .centerCrop()
-                .placeholder(R.color.colorPrimaryLight)
-                .into(thumbnailView);
+        thumbnailView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.colorAccent));
         setRankImage(rankImageView);
     }
 

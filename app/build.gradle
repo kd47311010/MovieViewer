@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.home.movieviewer"
@@ -23,7 +23,7 @@ android {
 }
 
 ext {
-    supportLibVersion = "23.3.0"
+    supportLibVersion = "24.2.0"
 }
 
 dependencies {
