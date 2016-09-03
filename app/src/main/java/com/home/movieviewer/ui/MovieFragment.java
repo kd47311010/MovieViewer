@@ -1,27 +1,28 @@
 package com.home.movieviewer.ui;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.home.movieviewer.R;
-import com.home.movieviewer.beans.MovieBean;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.namhyun.movieviewerassist.ServiceGenerator;
+import com.namhyun.movieviewerassist.models.BoxOfficeList;
+import com.namhyun.movieviewerassist.services.KobisApiService;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by namhyun on 2015-01-23.
@@ -50,16 +51,12 @@ public class MovieFragment extends Fragment {
             public void onRefresh() {
                 // Do something
                 // e.g. Request data
-                updateData();
+                mAdapter.clearItem();
+                updateData(getToday());
             }
         });
-        // Data request example
-        updateData();
+        updateData(getToday());
         return rootView;
-    }
-
-    private void updateData() {
-        new RequestTask().execute();
     }
 
     private String getToday() {
@@ -70,53 +67,32 @@ public class MovieFragment extends Fragment {
         return simpleDateFormat.format(calendar.getTime());
     }
 
-    private class RequestTask extends AsyncTask<Void, Void, MovieBean[]> {
+    private void updateData(String date) {
+        final String API_KEY = "7ffbb106d667ab3ddf34dc7ba8ff2c65";
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (!mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        }
-
-        @Override
-        protected MovieBean[] doInBackground(Void... params) {
-            final String BASE_URL = "http://carbide-primer-853.appspot.com/moviemove";
-            OkHttpClient okHttpClient = new OkHttpClient();
-            MovieBean[] beans = null;
-            String result = null;
-
-            try {
-                result = requestDataFromURL(okHttpClient, BASE_URL);
-                Gson gson = new Gson();
-                beans = gson.fromJson(result, MovieBean[].class);
-            } catch (IOException | JsonSyntaxException e) {
-                e.printStackTrace();
-            }
-            return beans;
-        }
-
-        @Override
-        protected void onPostExecute(MovieBean[] movieBeans) {
-            super.onPostExecute(movieBeans);
-            mAdapter.clearItem();
-            if (movieBeans != null) {
-                for (MovieBean container : movieBeans) {
-                    mAdapter.addItem(container);
-                }
-            }
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-
-        private String requestDataFromURL(OkHttpClient okHttpClient, String url) throws IOException {
-            Request request = null;
-            Response response = null;
-            request = new Request.Builder()
-                    .url(url)
-                    .build();
-            response = okHttpClient.newCall(request).execute();
-            return response.body().string();
+        KobisApiService service = ServiceGenerator.createService(KobisApiService.class);
+        if (service != null) {
+            Observable<BoxOfficeList> observable =
+                    service.searchDailyBoxOfficeList(API_KEY, date);
+            observable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<BoxOfficeList>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.d("KobisApi", "Completed!");
+                        }
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.e("KobisApi", "error: " + e.getMessage());
+                        }
+                        @Override
+                        public void onNext(BoxOfficeList boxOfficeList) {
+                            for (BoxOfficeList.BoxOfficeMovie movie : boxOfficeList.get()) {
+                                Log.d("KobisApi", movie.getRank() + " : " + movie.getMovieNm());
+                                mAdapter.addItem(movie);
+                            }
+                        }
+                    });
         }
     }
 }

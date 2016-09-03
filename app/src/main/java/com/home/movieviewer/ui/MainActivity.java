@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new MovieFragment())
                     .commit();
-//            setTitle(R.string.activity_main_name);
         }
         initToolbar();
         initDrawer();
