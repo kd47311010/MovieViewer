@@ -1,77 +1,31 @@
 package com.home.movieviewer.beans;
 
-import java.util.List;
+import com.namhyun.movieviewerassist.models.kobis.DailyBoxOfficeList;
+import com.namhyun.movieviewerassist.models.tmdb.Movie;
 
 /**
  * Created by namhyun on 2015-03-11.
  */
 public class MovieBean {
-    private String audiInten;
-    private String rankOldAndNew;
-    private String thumbnailUrl;
-    private String rankInten;
-    private String rank;
-    private String movieNm;
-    private String openDt;
-    private String audiCnt;
-    private String audiAcc;
-    private DetailBean detail;
+    /**
+        Kobis BoxOfficeList Object.
+     */
+    private final DailyBoxOfficeList boxOfficeList;
+    /**
+        The Movie Api MovieInfo Object.
+     */
+    private final Movie tmdbMovieInfo;
 
-    public String getAudiInten() {
-        return audiInten;
+    public MovieBean(DailyBoxOfficeList boxOfficeList, Movie tmdbMovieInfo) {
+        this.boxOfficeList = boxOfficeList;
+        this.tmdbMovieInfo = tmdbMovieInfo;
     }
 
-    public String getRankOldAndNew() {
-        return rankOldAndNew;
+    public DailyBoxOfficeList getBoxOfficeList() {
+        return boxOfficeList;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public String getRankInten() {
-        return rankInten;
-    }
-
-    public DetailBean getDetail() {
-        return detail;
-    }
-
-    public String getRank() {
-        return rank;
-    }
-
-    public String getMovieNm() {
-        return movieNm;
-    }
-
-    public String getOpenDt() {
-        return openDt;
-    }
-
-    public String getAudiCnt() {
-        return audiCnt;
-    }
-
-    public String getAudiAcc() {
-        return audiAcc;
-    }
-
-    public class DetailBean {
-        private String watchGradeNm;
-        private String showTm;
-        private List<String> genreNm;
-
-        public String getWatchGradeNm() {
-            return watchGradeNm;
-        }
-
-        public String getShowTm() {
-            return showTm;
-        }
-
-        public List<String> getGenreNm() {
-            return genreNm;
-        }
+    public Movie getTmdbMovieInfo() {
+        return tmdbMovieInfo;
     }
 }
