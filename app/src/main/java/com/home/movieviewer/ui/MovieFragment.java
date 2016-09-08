@@ -1,28 +1,32 @@
 package com.home.movieviewer.ui;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.home.movieviewer.R;
+import com.home.movieviewer.beans.MovieBean;
 import com.namhyun.movieviewerassist.ServiceGenerator;
-import com.namhyun.movieviewerassist.models.BoxOfficeList;
+import com.namhyun.movieviewerassist.models.kobis.DailyBoxOffice;
+import com.namhyun.movieviewerassist.models.kobis.DailyBoxOfficeList;
+import com.namhyun.movieviewerassist.models.tmdb.Movie;
 import com.namhyun.movieviewerassist.services.KobisApiService;
+import com.namhyun.movieviewerassist.services.TheMovieApiService;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import retrofit2.Call;
 
 /**
  * Created by namhyun on 2015-01-23.
@@ -30,8 +34,8 @@ import rx.schedulers.Schedulers;
 public class MovieFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private MovieAdapter mAdapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    public MovieAdapter mAdapter;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,31 +72,47 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateData(String date) {
-        final String API_KEY = "7ffbb106d667ab3ddf34dc7ba8ff2c65";
+        final String KOBIS_API_KEY = "7ffbb106d667ab3ddf34dc7ba8ff2c65";
+        final String TMDB_API_KEY = "848790748cc5407875ba6ae106a18f24";
+        new DailyBoxOfficeTask().execute(date, KOBIS_API_KEY, TMDB_API_KEY);
+    }
 
-        KobisApiService service = ServiceGenerator.createService(KobisApiService.class);
-        if (service != null) {
-            Observable<BoxOfficeList> observable =
-                    service.searchDailyBoxOfficeList(API_KEY, date);
-            observable.subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<BoxOfficeList>() {
-                        @Override
-                        public void onCompleted() {
-                            Log.d("KobisApi", "Completed!");
-                        }
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e("KobisApi", "error: " + e.getMessage());
-                        }
-                        @Override
-                        public void onNext(BoxOfficeList boxOfficeList) {
-                            for (BoxOfficeList.BoxOfficeMovie movie : boxOfficeList.get()) {
-                                Log.d("KobisApi", movie.getRank() + " : " + movie.getMovieNm());
-                                mAdapter.addItem(movie);
-                            }
-                        }
-                    });
+    public class DailyBoxOfficeTask extends AsyncTask<String, Void, List<MovieBean>> {
+
+        @Override
+        protected List<MovieBean> doInBackground(String... params) {
+            List<MovieBean> movieBeanList = new ArrayList<>();
+
+            final String kobisApiKey = params[1];
+            final String tmdbApiKey = params[2];
+            final String date = params[0];
+
+            KobisApiService kobisApiService = ServiceGenerator.createService(KobisApiService.class);
+            TheMovieApiService theMovieApiService = ServiceGenerator.createService(TheMovieApiService.class);
+
+            if (kobisApiService != null) {
+                try {
+                    Call<DailyBoxOffice> boxOfficeCall
+                            = kobisApiService.getDailyBoxOffice(kobisApiKey, date);
+                    DailyBoxOffice dailyBoxOffice = boxOfficeCall.execute().body();
+                    List<DailyBoxOfficeList> lists = dailyBoxOffice.getBoxOfficeResult().getDailyBoxOfficeList();
+                    for (DailyBoxOfficeList item : lists) {
+                        Call<Movie> movieCall = theMovieApiService.searchMovie(tmdbApiKey, item.getMovieNm());
+                        Movie movie =  movieCall.execute().body();
+                        movieBeanList.add(new MovieBean(item, movie));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return movieBeanList;
+        }
+
+        @Override
+        protected void onPostExecute(List<MovieBean> movieBean) {
+            super.onPostExecute(movieBean);
+            if (mSwipeRefreshLayout.isRefreshing()) mSwipeRefreshLayout.setRefreshing(false);
+            mAdapter.addItems(movieBean);
         }
     }
 }
